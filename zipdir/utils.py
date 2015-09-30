@@ -57,3 +57,15 @@ def mark_all_end_subdirs(root_dir, mark_filename='.compress_dir', exclude='^\.')
                     abs_paths.append(root)
     mark_dirs(abs_paths, mark_filename=mark_filename)
     return abs_paths
+
+
+def mark_subdirs_gt(root_dir, maxcount=100, mark_filename='.compress_dir', exclude='^\.'):
+    assert os.path.isabs(root_dir)
+    abs_paths = list()
+    exclude_path = re.compile(str(exclude))
+    for root, dirs, files in os.walk(root_dir):
+        if len(dirs) + len(files) >= maxcount:
+            if not exclude_path.search(os.path.split(root)[-1]):
+                if os.path.isdir(root):
+                    abs_paths.append(root)
+    mark_dirs(abs_paths, mark_filename=mark_filename)
